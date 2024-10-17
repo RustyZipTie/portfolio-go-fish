@@ -37,6 +37,15 @@ class Deck:
     def pop(self, idx: int) -> Card:
         return self.cards.pop(idx)
 
+    def pop_match(self, value: int) -> Card | None:
+        if not value in values:
+            raise ValueError(f"Improper value: {value}")
+        for card in self.cards:
+            if card.get_value() == value:
+                return card
+
+        return
+
     def __str__(self):
         return "\n".join(str(a_card) for a_card in self.cards)
 

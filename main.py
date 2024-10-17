@@ -1,9 +1,9 @@
 from cards.deck import Deck
-from UI import menu, msg
+from cards.card import Card
+from players.UI import menu
 from players.player import Player
 
 # setup
-game_deck = Deck()
-user = Player(game_deck, request=lambda a: menu(a, num=True, obj=False))
-
-user.request()
+c1 = Card(12, "hearts")
+c2 = Card(12, "spades")
+print(c1 == c2)
