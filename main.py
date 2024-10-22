@@ -2,7 +2,10 @@ from random import randint
 
 from cards.deck import Deck
 from players.UI import menu
+from players.opponent import Opp
 from players.player import Player
+
+help(Opp)
 
 def choose_random(options: list[str]) -> str:
     """choose a random string from a list"""
@@ -10,9 +13,11 @@ def choose_random(options: list[str]) -> str:
     return options[idx]
 
 # setup
+opponent_mind = Opp()
 game_deck = Deck()
 user = Player("Player", game_deck, lambda a: menu(a, caption="Choose what value to request:"), True)
-opp = Player("Opponent", game_deck, choose_random, False)
+opp = Player("Opponent", game_deck, opponent_mind.get_choice, False)
+opponent_mind.register_books(user.books, opp.books)
 user.draw(7)
 opp.draw(7)
 user.check_books()
@@ -32,7 +37,12 @@ while True:
     opp.print_books()
 
     # make request
-    user.receive(opp.respond(user.request()))
+    user_request = user.request()
+    opponent_mind.register_player_request(user_request)
+    opp_response = opp.respond(user_request)
+    if len(opp_response) == 0:
+        opponent_mind.register_player_draw()
+    user.receive(opp_response)
 
     # check for books
     user.check_books()
@@ -49,7 +59,10 @@ while True:
         break
 
     # make request
-    opp.receive(user.respond(opp.request()))
+    opp_request = opp.request()
+    opponent_mind.register_opp_request(opp_request)
+    user_response = user.respond(opp_request)
+    opp.receive(user_response)
 
     # check for books
     opp.check_books()
