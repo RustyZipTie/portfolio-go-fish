@@ -5,8 +5,6 @@ from players.UI import menu
 from players.opponent import Opp
 from players.player import Player
 
-help(Opp)
-
 def choose_random(options: list[str]) -> str:
     """choose a random string from a list"""
     idx = randint(0, len(options)-1)
